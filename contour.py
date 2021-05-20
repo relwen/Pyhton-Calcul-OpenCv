@@ -8,13 +8,13 @@ from descriteur_geste import DetecteurGeste
 md=DetecteurMouvement()
 gd=DetecteurGeste()
 stream=cv2.VideoCapture(0)
-top, right, bot, left=(10,350,225,590)
+top, right, bot, left=(20,50,325,490)
 nb_image=0
 geste=None
 valeur=[]
 seuil=None
 fourcc=cv2.VideoWriter_fourcc(*'MP4V')
-writer=cv2.VideoWriter("video4.mp4", 0x7634706d, 13.0, (840, 450))
+writer=cv2.VideoWriter("video4.mp4", 0x7634706d, 13.0, (840, 550))
 mask=None
 while True:
 
@@ -22,11 +22,14 @@ while True:
 	if not continue_:
 		break
 
-	img=imutils.resize(img, width=600)
+	img=imutils.resize(img, width=700)
 	img=cv2.flip(img, 1)
 	copy=img.copy()
 	roi=img[top:bot, right:left]	
+	
+	
 	gray=cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+
 	gray=cv2.GaussianBlur(gray, (7, 7), 0)
 	if nb_image<32:
 		md.update(gray)
@@ -55,19 +58,21 @@ while True:
 				else:
 					geste=None	
 
-	
-	if len(valeur)>0:
-		DetecteurGeste.drawBox(copy, 0)
-		DetecteurGeste.drawText(copy, 0, valeur[0])
-		DetecteurGeste.drawText(copy, 1, "+")
- 
-	if len(valeur)==2:
-		DetecteurGeste.drawBox(copy, 2)
-		DetecteurGeste.drawText(copy, 2, valeur[1])
-		DetecteurGeste.drawText(copy, 3, "=")
-		DetecteurGeste.drawBox(copy, 4, color=(0, 255, 0))
-		DetecteurGeste.drawText(copy, 4, valeur[0] + valeur[1], color=(0, 255, 0))
 
+	
+#	if len(valeur)>0:
+#		DetecteurGeste.drawBox(copy, 0)
+#		DetecteurGeste.drawText(copy, 0, valeur[0])
+#		DetecteurGeste.drawText(copy, 1, "+")
+ 
+#	if len(valeur)==2:
+#		DetecteurGeste.drawBox(copy, 2)
+#		DetecteurGeste.drawText(copy, 2, valeur[1])
+#		DetecteurGeste.drawText(copy, 3, "=")
+#		DetecteurGeste.drawBox(copy, 4, color=(0, 255, 0))
+#		DetecteurGeste.drawText(copy, 4, valeur[0] + valeur[1], color=(0, 255, 0))
+
+	# Afficher le cadre pour reconnaitre le motif
 	cv2.rectangle(copy, (left, top), (right, bot), (0, 0, 255), 2)
 	if seuil is not None:
 		if mask is None:
@@ -77,6 +82,7 @@ while True:
 
 	cv2.imshow("stream", copy)
 	nb_image+=1
+
 	if mask is not None:	
 		writer.write(mask)
 	

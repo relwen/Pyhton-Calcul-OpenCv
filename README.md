@@ -1,1 +1,1 @@
-# Pyhton-Calcul-OpenCv
+# Projet de Python Réconnaissance de Motifs
